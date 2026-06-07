@@ -47,7 +47,7 @@ Create a secure, private configuration text file named exactly `.env` within the
 # STAGE 1: Market Intelligence Discovery Key (Apollo.io API Key)
 MARKET_INTELLIGENCE_DISCOVERY_KEY=your_apollo_io_token_here
 
-# STAGE 2: Core Executive Enrichment Key (Prospeo API Key)
+# STAGE 2 & 3: Core Executive Enrichment Key (Prospeo API Key)
 ENRICHMENT_PIPELINE_SERVICE_KEY=your_prospeo_token_here
 
 # STAGE 4: Transactional Mail Transmission Key (Brevo API Key)
