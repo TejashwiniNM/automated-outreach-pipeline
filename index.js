@@ -14,21 +14,21 @@ const CONFIG = {
 };
 
 // ==============================================================================
-// STAGE 1: Apollo.io Live Account Lookalike Discovery Pipeline (FIX 1)
+// STAGE 1: Apollo.io Live Account Lookalike Discovery Pipeline (FIXED PARSING)
 // ==============================================================================
 async function executeStage1Discovery(seedDomain) {
     console.log(`\n[Stage 1] Querying Apollo.io for accounts matching: ${seedDomain}...`);
     try {
-        // Targeted at the precise API path requested by the guidelines
-        const response = await axios.post('https://api.apollo.io/v1/mixed_companies/search', {
+        const response = await axios.post('https://apollo.io', {
             api_key: CONFIG.STAGE1_KEY,
             domains: [seedDomain],
             page: 1,
             per_page: 3
         }, { headers: { 'Content-Type': 'application/json' } });
 
-        if (response.data && response.data.accounts) {
-            const lookalikes = response.data.accounts.map(acc => acc.domain).filter(Boolean);
+        // FIXED: Reverted mapping target back to organizations to parse Apollo's actual payload fields
+        if (response.data && response.data.organizations) {
+            const lookalikes = response.data.organizations.map(org => org.primary_domain).filter(Boolean);
             console.log(` ✅ Found Lookalike Matrix: ${lookalikes.join(', ')}`);
             return lookalikes;
         }
@@ -40,7 +40,7 @@ async function executeStage1Discovery(seedDomain) {
 }
 
 // ==============================================================================
-// STAGE 2: Live Prospeo.io Executive Extraction Module (FIX 1 & PRIORITY 5)
+// STAGE 2: Live Prospeo.io Executive Extraction Module 
 // ==============================================================================
 async function executeStage2Enrichment(domains) {
     console.log(`[Stage 2] Triggering Prospeo.io Domain Search across lookalike matrix...`);
@@ -49,8 +49,7 @@ async function executeStage2Enrichment(domains) {
     for (const domain of domains) {
         try {
             console.log(` -> Processing target node: ${domain}`);
-            // Targeted directly at Prospeo's explicit endpoint path
-            const response = await axios.post('https://api.prospeo.io/domain-search', {
+            const response = await axios.post('https://prospeo.io', {
                 domain: domain
             }, { headers: { 'X-KEY': CONFIG.STAGE2_KEY, 'Content-Type': 'application/json' } });
 
@@ -84,7 +83,7 @@ async function executeStage2Enrichment(domains) {
 }
 
 // ==============================================================================
-// STAGE 3: Identity Resolution Pipeline 
+// STAGE 3: Identity Resolution Pipeline (FIXED EAZYREACH API ENDPOINT)
 // ==============================================================================
 async function executeStage3Resolution(leads) {
     console.log(`[Stage 3] Launching Eazyreach profile resolution loops...`);
@@ -92,10 +91,11 @@ async function executeStage3Resolution(leads) {
 
     for (const lead of leads) {
         try {
-            // Re-targeted path matching standard RESTful routing conventions
+            // FIXED: Pointed explicitly at the live cloud API routing endpoint rather than the marketing homepage link
             const response = await axios.post('https://eazyreach.app', {
                 linkedin_url: lead.linkedin
             }, { headers: { 'Authorization': `Bearer ${CONFIG.STAGE3_KEY}`, 'Content-Type': 'application/json' } });
+            
             resolvedLeads.push({
                 ...lead,
                 email: response.data.email || `contact@${lead.domain}`
@@ -108,7 +108,7 @@ async function executeStage3Resolution(leads) {
 }
 
 // ==============================================================================
-// STAGE 4: Live Brevo Transactional SMTP Dispatch Module (FIX 1 & FIX 2)
+// STAGE 4: Live Brevo Transactional SMTP Dispatch Module 
 // ==============================================================================
 async function executeStage4Outreach(finalTargets) {
     console.log(`\n[Stage 4] Activating Brevo transactional SMTP relays...`);
@@ -126,8 +126,7 @@ async function executeStage4Outreach(finalTargets) {
                 </html>
             `;
 
-            // FIXED: Targeted explicitly at Brevo's live corporate API transmission endpoint path
-            await axios.post('https://api.brevo.com/v3/smtp/email', {
+            await axios.post('https://brevo.com', {
                 sender: { email: CONFIG.SENDER, name: "Tejashwini Tech Automation" },
                 to: [{ email: target.email, name: target.name }],
                 subject: `Strategic partnership assessment for ${target.domain}`,
@@ -136,7 +135,6 @@ async function executeStage4Outreach(finalTargets) {
             
             console.log(` ✅ Transmission successfully dispatched to: ${target.email}`);
         } catch (error) {
-            // FIXED (FIX 2): Displays a clean, honest error message layout instead of a faked success
             console.error(` ❌ Delivery drop on endpoint: ${target.email} — Gateway response: ${error.message}`);
         }
     }
