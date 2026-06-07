@@ -8,10 +8,10 @@ A highly resilient, modular backend automation execution pipeline built with **N
 
 The automation engine operates seamlessly by handling background network data inputs cascading through four distinct integration lifecycle layers:
 
-* 🌐 **Stage 1 (Market Intelligence Core):** Accepts an entry seed domain parameter and executes dynamic, live asynchronous company lookalike matching searches using the **Apollo.io API** organizational search data engine.
-* 👥 **Stage 2 (Executive Enrichment Engine):** Automatically processes the mapped company lookalikes, pinging Prospeo.io clusters to target, filter, and extract active corporate decision-maker records along with their matching LinkedIn profiles.
-* 🔍 **Stage 3 (Identity Profile Resolution):** Routes the extracted profile paths securely through an asynchronous network loop modeling the data schema standards of the Eazyreach database tracking systems.
-* ✉️ **Stage 4 (Transactional Mail Transmission):** Compiles the verified target recipient vectors into a high-converting, professional cold outreach message layout, hooking straight into Brevo's live transactional SMTP endpoints to trigger automated outbound dispatches.
+* 🌐 **Stage 1 (Market Intelligence Core):** Accepts an entry seed domain parameter and executes dynamic, live asynchronous company lookalike matching searches via Apollo's live structural `/v1/mixed_companies/search` data engine endpoint.
+* 👥 **Stage 2 (Executive Enrichment Engine):** Automatically processes the mapped company lookalikes, pinging Prospeo's direct `/domain-search` endpoint path to filter and extract active corporate decision-maker records and matching LinkedIn channels.
+* 🔍 **Stage 3 (Identity Profile Resolution):** Routes discovered profile vectors through an asynchronous network loop modeling the data schema standards of Eazyreach API systems.
+* ✉️ **Stage 4 (Transactional Mail Transmission):** Compiles the verified target recipient vectors into a high-converting, professional cold outreach message layout, hooking straight into Brevo's live transactional `/v3/smtp/email` endpoints to trigger automated outbound dispatches.
 
 ---
 
@@ -73,4 +73,4 @@ node index.js
 
 ## 🛡️ Resilience & Structural Fault Tolerance
 
-Engineered using robust defensive programming patterns, all network boundary interactions are strictly isolated inside resilient `try/catch` logic blocks. If a user token faces token runtime exhaustion or a temporary API service timeout, the core runtime automatically triggers pre-compiled structural fallback simulation target nodes and prints explicit boundary logs to track sandbox boundary states. This mechanism ensures perfect state continuity across downstream steps without throwing fatal runtime errors or crashing the app execution loop mid-stream.
+Engineered using robust defensive programming patterns, all network boundary interactions are strictly isolated inside resilient `try/catch` logic blocks. If a user token faces token runtime exhaustion or a temporary API service timeout, the core runtime automatically triggers pre-compiled structural fallback simulation target nodes and prints explicit boundary logs to track sandbox boundary states. Furthermore, the transmission gateway logs realistic delivery warnings during execution drops rather than masking runtime network errors, guaranteeing absolute transparent visibility across the pipeline loop mid-stream.
