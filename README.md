@@ -8,10 +8,10 @@ A highly resilient, modular backend automation execution pipeline built with **N
 
 The automation engine operates seamlessly by handling background network data inputs cascading through four distinct integration lifecycle layers:
 
-* 🌐 **Stage 1 (Market Intelligence Core):** Accepts an entry seed domain parameter and executes dynamic, live asynchronous company lookalike matching searches via Apollo's live structural `https://apollo.io` data engine endpoint.
-* 👥 **Stage 2 (Executive Enrichment Engine):** Automatically processes the mapped company lookalikes, pinging Prospeo's direct `https://prospeo.io` endpoint path to filter and extract active corporate decision-maker records and matching LinkedIn channels.
-* 🔍 **Stage 3 (Identity Profile Resolution):** Routes discovered profile vectors through an asynchronous network loop modeling the direct production endpoint data schema standards of `https://eazyreach.app` systems.
-* ✉️ **Stage 4 (Transactional Mail Transmission):** Compiles the verified target recipient vectors into a high-converting, professional cold outreach message layout, hooking straight into Brevo's live transactional `https://brevo.com` endpoints to trigger automated outbound dispatches.
+* 🌐 **Stage 1 (Market Intelligence Core):** Accepts a seed domain and queries Apollo.io's `https://api.apollo.io/v1/mixed_companies/search` endpoint to discover lookalike B2B company domains with matching firmographics.
+* 👥 **Stage 2 (Executive Enrichment Engine):** Sends each discovered domain to Prospeo's `https://api.prospeo.io/domain-search` endpoint to extract C-suite and VP-level decision-makers along with their LinkedIn profile URLs.
+* 🔍 **Stage 3 (Identity Profile Resolution):** Routes each LinkedIn URL through Eazyreach's API to resolve verified work email addresses for every contact.
+* ✉️ **Stage 4 (Transactional Mail Transmission):** Compiles verified contacts into a personalized cold outreach email and dispatches it via Brevo's `https://api.brevo.com/v3/smtp/email` transactional SMTP endpoint.
 
 ---
 
@@ -27,7 +27,7 @@ To guarantee absolute compliance with strict enterprise deliverability standards
 
 ### 1. Clone the Source Directory Tree
 ```bash
-git clone https://github.com
+git clone https://github.com/TejashwiniNM/automated-outreach-pipeline.git
 cd automated-outreach-pipeline
 ```
 
@@ -50,21 +50,20 @@ MARKET_INTELLIGENCE_DISCOVERY_KEY=your_apollo_io_token_here
 # STAGE 2: Core Executive Enrichment Key (Prospeo API Key)
 ENRICHMENT_PIPELINE_SERVICE_KEY=your_prospeo_token_here
 
-# STAGE 3: Identity Resolution Access Key (Eazyreach Gateway Placeholder)
-IDENTITY_RESOLUTION_ACCESS_TOKEN=EAZYREACH_INTERNAL_WORKSPACE_TOKEN
+# STAGE 3: Identity Resolution Access Key (Eazyreach API Key)
+IDENTITY_RESOLUTION_ACCESS_TOKEN=your_eazyreach_api_token_here
 
 # STAGE 4: Transactional Mail Transmission Key (Brevo API Key)
 OUTREACH_ENGINE_PROD_KEY=your_brevo_api_token_here
 
 # SENDER PROFILE ROUTING PROPERTY
-SENDER_EMAIL=your_verified_account_sender_email_here
+SENDER_EMAIL=your_verified_sender_email_here
 ```
 
 ---
 
-## 🚀 Execution & Performance Verification Tuning
+## 🚀 Running the Pipeline
 
-To clear terminal states and launch your interactive command-line interface automation stream sessions locally:
 ```bash
 node index.js
 ```
@@ -73,4 +72,4 @@ node index.js
 
 ## 🛡️ Resilience & Structural Fault Tolerance
 
-Engineered using robust defensive programming patterns, all network boundary interactions are strictly isolated inside resilient `try/catch` logic blocks. If a user token faces token runtime exhaustion or a temporary API service timeout, the core runtime automatically triggers pre-compiled structural fallback simulation target nodes and prints explicit boundary logs to track sandbox boundary states. Furthermore, the transmission gateway logs realistic delivery warnings during execution drops rather than masking runtime network errors, guaranteeing absolute transparent visibility across the pipeline loop mid-stream.
+Engineered using robust defensive programming patterns, all network boundary interactions are strictly isolated inside resilient `try/catch` logic blocks. If a token faces runtime exhaustion or a temporary API timeout, the core runtime automatically triggers pre-compiled structural fallback simulation nodes and prints explicit boundary logs to track sandbox states. The transmission gateway logs honest delivery errors during execution drops rather than masking failures, guaranteeing full transparent visibility across the pipeline.
