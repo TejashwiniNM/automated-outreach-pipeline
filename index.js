@@ -86,7 +86,7 @@ async function executeStage2Enrichment(domains) {
             title: 'Hiring Lead',
             domain: 'subspace.id',
             linkedin: 'https://linkedin.com',
-            email: 'info@subspace.id'
+            email: 'tejashwininmteju@gmail.com'
         });
     }
     return leadsPool;
