@@ -1,6 +1,6 @@
 # 🚀 4-Stage Automated Outreach Pipeline Engine
 
-A highly resilient, modular backend automation execution pipeline built with **Node.js** and **ES Modules** syntax. This application sequentially streams asynchronously chained stages—uncovering lookalike target matrices, enriching C-suite executive identity coordinates, resolving communication channels, and dispatching live transactional payloads—all through a unified command-line prompt interface.
+A highly resilient, modular backend automation execution pipeline built with **Node.js** and **ES Modules** syntax. This application sequentially streams asynchronously chained stages—uncovering B2B lookalike account matrices, enriching C-suite executive identity coordinates, resolving communication channels, and dispatching live transactional payloads—all through a unified command-line prompt interface.
 
 ---
 
@@ -8,10 +8,10 @@ A highly resilient, modular backend automation execution pipeline built with **N
 
 The automation engine operates seamlessly by handling background network data inputs cascading through four distinct integration lifecycle layers:
 
-* 🌐 **Stage 1 (Market Intelligence Core):** Accepts an entry seed domain parameter and executes dynamic, live asynchronous competitor matching discovery lookups via the Brandfetch data engine layer.
+* 🌐 **Stage 1 (Market Intelligence Core):** Accepts an entry seed domain parameter and executes dynamic, live asynchronous company lookalike matching searches using the **Apollo.io API** organizational search data engine.
 * 👥 **Stage 2 (Executive Enrichment Engine):** Automatically processes the mapped company lookalikes, pinging Prospeo.io clusters to target, filter, and extract active corporate decision-maker records along with their matching LinkedIn profiles.
 * 🔍 **Stage 3 (Identity Profile Resolution):** Routes the extracted profile paths securely through an asynchronous network loop modeling the data schema standards of the Eazyreach database tracking systems.
-* ✉️ **Stage 4 (Transactional Mail Transmission):** Compiles the verified target recipient vectors, hooking straight into Brevo's live transactional SMTP endpoints to trigger automated outbound dispatches.
+* ✉️ **Stage 4 (Transactional Mail Transmission):** Compiles the verified target recipient vectors into a high-converting, professional cold outreach message layout, hooking straight into Brevo's live transactional SMTP endpoints to trigger automated outbound dispatches.
 
 ---
 
@@ -44,8 +44,8 @@ Create a secure, private configuration text file named exactly `.env` within the
 # AUTOMATION ENGINE PRIVACY CREDENTIAL MATRIX
 # ==============================================================================
 
-# STAGE 1: Market Intelligence Discovery Key (Brandfetch API Key)
-MARKET_INTELLIGENCE_DISCOVERY_KEY=your_brandfetch_token_here
+# STAGE 1: Market Intelligence Discovery Key (Apollo.io API Key)
+MARKET_INTELLIGENCE_DISCOVERY_KEY=your_apollo_io_token_here
 
 # STAGE 2: Core Executive Enrichment Key (Prospeo API Key)
 ENRICHMENT_PIPELINE_SERVICE_KEY=your_prospeo_token_here
@@ -73,4 +73,4 @@ node index.js
 
 ## 🛡️ Resilience & Structural Fault Tolerance
 
-Engineered using robust defensive programming patterns, all network boundary interactions are strictly isolated inside resilient `try/catch` logic blocks. If a user token faces token runtime exhaustion or a temporary API service timeout, the core runtime automatically triggers pre-compiled structural fallback simulation target nodes. This mechanism ensures perfect state continuity across downstream steps without throwing fatal runtime errors or crashing the app execution loop mid-stream.
+Engineered using robust defensive programming patterns, all network boundary interactions are strictly isolated inside resilient `try/catch` logic blocks. If a user token faces token runtime exhaustion or a temporary API service timeout, the core runtime automatically triggers pre-compiled structural fallback simulation target nodes and prints explicit boundary logs to track sandbox boundary states. This mechanism ensures perfect state continuity across downstream steps without throwing fatal runtime errors or crashing the app execution loop mid-stream.
