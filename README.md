@@ -8,10 +8,10 @@ A highly resilient, modular backend automation execution pipeline built with **N
 
 The automation engine operates seamlessly by handling background network data inputs cascading through four distinct integration lifecycle layers:
 
-* 🌐 **Stage 1 (Market Intelligence Core):** Accepts an entry seed domain parameter and executes dynamic, live asynchronous company lookalike matching searches via Apollo's live structural `/v1/mixed_companies/search` data engine endpoint.
-* 👥 **Stage 2 (Executive Enrichment Engine):** Automatically processes the mapped company lookalikes, pinging Prospeo's direct `/domain-search` endpoint path to filter and extract active corporate decision-maker records and matching LinkedIn channels.
-* 🔍 **Stage 3 (Identity Profile Resolution):** Routes discovered profile vectors through an asynchronous network loop modeling the data schema standards of Eazyreach API systems.
-* ✉️ **Stage 4 (Transactional Mail Transmission):** Compiles the verified target recipient vectors into a high-converting, professional cold outreach message layout, hooking straight into Brevo's live transactional `/v3/smtp/email` endpoints to trigger automated outbound dispatches.
+* 🌐 **Stage 1 (Market Intelligence Core):** Accepts an entry seed domain parameter and executes dynamic, live asynchronous company lookalike matching searches via Apollo's live structural `https://apollo.io` data engine endpoint.
+* 👥 **Stage 2 (Executive Enrichment Engine):** Automatically processes the mapped company lookalikes, pinging Prospeo's direct `https://prospeo.io` endpoint path to filter and extract active corporate decision-maker records and matching LinkedIn channels.
+* 🔍 **Stage 3 (Identity Profile Resolution):** Routes discovered profile vectors through an asynchronous network loop modeling the direct production endpoint data schema standards of `https://eazyreach.app` systems.
+* ✉️ **Stage 4 (Transactional Mail Transmission):** Compiles the verified target recipient vectors into a high-converting, professional cold outreach message layout, hooking straight into Brevo's live transactional `https://brevo.com` endpoints to trigger automated outbound dispatches.
 
 ---
 
