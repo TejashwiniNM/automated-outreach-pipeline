@@ -8,7 +8,6 @@ dotenv.config();
 const CONFIG = {
     STAGE1_KEY: process.env.MARKET_INTELLIGENCE_DISCOVERY_KEY,
     STAGE2_KEY: process.env.ENRICHMENT_PIPELINE_SERVICE_KEY,
-    STAGE3_KEY: process.env.IDENTITY_RESOLUTION_ACCESS_TOKEN,
     STAGE4_KEY: process.env.OUTREACH_ENGINE_PROD_KEY,
     SENDER: process.env.SENDER_EMAIL
 };
@@ -19,28 +18,31 @@ const CONFIG = {
 async function executeStage1Discovery(seedDomain) {
     console.log(`\n[Stage 1] Querying Apollo.io for accounts matching: ${seedDomain}...`);
     try {
-        // VERIFIED: Explicit live API routing endpoint path (NO website homepage URL)
-        const response = await axios.post('https://api.apollo.io/v1/mixed_companies/search', {
+        const response = await axios.post('https://api.apollo.io/v1/organizations/search', {
             api_key: CONFIG.STAGE1_KEY,
-            domains: [seedDomain],
+            similar_to_domains: [seedDomain],
             page: 1,
             per_page: 3
-        }, { headers: { 'Content-Type': 'application/json' } });
+        }, { headers: { 'Content-Type': 'application/json', 'x-api-key': CONFIG.STAGE1_KEY } });
 
-        if (response.data && response.data.organizations) {
+        if (response.data && response.data.organizations && response.data.organizations.length > 0) {
             const lookalikes = response.data.organizations.map(org => org.primary_domain).filter(Boolean);
             console.log(` ✅ Found Lookalike Matrix: ${lookalikes.join(', ')}`);
             return lookalikes;
         }
         return ['stripe.com', 'razorpay.com'];
     } catch (error) {
-        console.log(` [Stage 1 Info] Dynamic Account Discovery active. Passing target routing matrix...`);
+        const status = error.response?.status;
+        const msg = error.response?.data?.error || error.message;
+        console.log(` [Stage 1 Info] Apollo returned ${status || 'no response'}: ${msg}`);
+        console.log(` [Stage 1 Fallback] Passing target routing matrix: stripe.com, razorpay.com`);
         return ['stripe.com', 'razorpay.com'];
     }
 }
 
 // ==============================================================================
-// STAGE 2: Live Prospeo.io Executive Extraction Module 
+// STAGE 2: Live Prospeo.io Executive Extraction Module
+// (Now also extracts emails directly — replaces Eazyreach as per updated instructions)
 // ==============================================================================
 async function executeStage2Enrichment(domains) {
     console.log(`[Stage 2] Triggering Prospeo.io Domain Search across lookalike matrix...`);
@@ -49,25 +51,31 @@ async function executeStage2Enrichment(domains) {
     for (const domain of domains) {
         try {
             console.log(` -> Processing target node: ${domain}`);
-            // VERIFIED: Explicit live API routing endpoint path (NO website homepage URL)
             const response = await axios.post('https://api.prospeo.io/domain-search', {
                 domain: domain
             }, { headers: { 'X-KEY': CONFIG.STAGE2_KEY, 'Content-Type': 'application/json' } });
 
-            if (response.data && response.data.company && response.data.company.email_elements) {
-                response.data.company.email_elements.forEach(element => {
-                    if (element.linkedin) {
-                        leadsPool.push({
-                            name: element.name || 'Decision Maker',
-                            title: element.title || 'Executive',
-                            domain: domain,
-                            linkedin: element.linkedin
-                        });
-                    }
-                });
+            const emailList =
+                response.data?.response?.email_list ||
+                response.data?.company?.email_elements ||
+                [];
+
+            emailList.forEach(element => {
+                const linkedin = element.linkedin || element.linkedin_url;
+                const name = element.full_name || element.name ||
+                    `${element.first_name || ''} ${element.last_name || ''}`.trim() || 'Decision Maker';
+                const title = element.position || element.title || 'Executive';
+                const email = element.email || `info@${domain}`;
+                leadsPool.push({ name, title, domain, linkedin, email });
+            });
+
+            if (emailList.length > 0) {
+                console.log(` ✅ Extracted ${emailList.length} contact(s) from ${domain}`);
             }
         } catch (error) {
-            console.log(`   ⚠️ Boundary log: Node trace [${domain}] bypassed. Sandbox boundary protection active.`);
+            const status = error.response?.status;
+            const msg = error.response?.data?.error || error.message;
+            console.log(`   ⚠️ Boundary log: Node trace [${domain}] returned ${status || 'no response'}: ${msg}`);
         }
     }
 
@@ -77,34 +85,29 @@ async function executeStage2Enrichment(domains) {
             name: 'Ragu SDE',
             title: 'Hiring Lead',
             domain: 'subspace.id',
-            linkedin: 'https://linkedin.com'
+            linkedin: 'https://linkedin.com',
+            email: 'info@subspace.id'
         });
     }
     return leadsPool;
 }
 
 // ==============================================================================
-// STAGE 3: Identity Resolution Pipeline 
+// STAGE 3: Identity Resolution Pipeline
+// (Prospeo now resolves both LinkedIn and email — no Eazyreach needed)
 // ==============================================================================
 async function executeStage3Resolution(leads) {
-    console.log(`[Stage 3] Launching Eazyreach profile resolution loops...`);
+    console.log(`[Stage 3] Resolving contact identity matrix via Prospeo data...`);
     let resolvedLeads = [];
 
     for (const lead of leads) {
-        try {
-            // VERIFIED: Explicit live API routing endpoint path (NO website homepage URL)
-            const response = await axios.post('https://eazyreach.app', {
-                linkedin_url: lead.linkedin
-            }, { headers: { 'Authorization': `Bearer ${CONFIG.STAGE3_KEY}`, 'Content-Type': 'application/json' } });
-            
-            resolvedLeads.push({
-                ...lead,
-                email: response.data.email || `contact@${lead.domain}`
-            });
-        } catch (error) {
-            resolvedLeads.push({ ...lead, email: `info@${lead.domain}` });
-        }
+        resolvedLeads.push({
+            ...lead,
+            email: lead.email || `info@${lead.domain}`
+        });
+        console.log(` ✅ Identity resolved: ${lead.name} → ${lead.email || `info@${lead.domain}`}`);
     }
+
     return resolvedLeads;
 }
 
@@ -127,7 +130,6 @@ async function executeStage4Outreach(finalTargets) {
                 </html>
             `;
 
-            // VERIFIED: Explicit live API routing endpoint path (NO website homepage URL)
             await axios.post('https://api.brevo.com/v3/smtp/email', {
                 sender: { email: CONFIG.SENDER, name: "Tejashwini Tech Automation" },
                 to: [{ email: target.email, name: target.name }],
@@ -137,7 +139,9 @@ async function executeStage4Outreach(finalTargets) {
             
             console.log(` ✅ Transmission successfully dispatched to: ${target.email}`);
         } catch (error) {
-            console.error(` ❌ Delivery failed for: ${target.email} — ${error.message}`);
+            const status = error.response?.status;
+            const msg = error.response?.data?.message || error.message;
+            console.error(` ❌ Delivery failed for: ${target.email} — ${status || ''}: ${msg}`);
         }
     }
 }

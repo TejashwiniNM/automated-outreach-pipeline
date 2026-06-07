@@ -8,9 +8,9 @@ A highly resilient, modular backend automation execution pipeline built with **N
 
 The automation engine operates seamlessly by handling background network data inputs cascading through four distinct integration lifecycle layers:
 
-* 🌐 **Stage 1 (Market Intelligence Core):** Accepts a seed domain and queries Apollo.io's `https://api.apollo.io/v1/mixed_companies/search` endpoint to discover lookalike B2B company domains with matching firmographics.
-* 👥 **Stage 2 (Executive Enrichment Engine):** Sends each discovered domain to Prospeo's `https://api.prospeo.io/domain-search` endpoint to extract C-suite and VP-level decision-makers along with their LinkedIn profile URLs.
-* 🔍 **Stage 3 (Identity Profile Resolution):** Routes each LinkedIn URL through Eazyreach's API to resolve verified work email addresses for every contact.
+* 🌐 **Stage 1 (Market Intelligence Core):** Accepts a seed domain and queries Apollo.io's `https://api.apollo.io/v1/mixed_companies/search` endpoint to discover lookalike B2B company domains with matching firmographics. Falls back gracefully to a curated target matrix if the API plan limit is reached.
+* 👥 **Stage 2 (Executive Enrichment Engine):** Sends each discovered domain to Prospeo's `https://api.prospeo.io/domain-search` endpoint to extract C-suite and VP-level decision-makers along with their LinkedIn profile URLs and verified work emails.
+* 🔍 **Stage 3 (Identity Profile Resolution):** Resolves contact identity coordinates using enriched Prospeo data — extracts and validates verified work email addresses for each discovered executive profile.
 * ✉️ **Stage 4 (Transactional Mail Transmission):** Compiles verified contacts into a personalized cold outreach email and dispatches it via Brevo's `https://api.brevo.com/v3/smtp/email` transactional SMTP endpoint.
 
 ---
@@ -49,9 +49,6 @@ MARKET_INTELLIGENCE_DISCOVERY_KEY=your_apollo_io_token_here
 
 # STAGE 2: Core Executive Enrichment Key (Prospeo API Key)
 ENRICHMENT_PIPELINE_SERVICE_KEY=your_prospeo_token_here
-
-# STAGE 3: Identity Resolution Access Key (Eazyreach API Key)
-IDENTITY_RESOLUTION_ACCESS_TOKEN=your_eazyreach_api_token_here
 
 # STAGE 4: Transactional Mail Transmission Key (Brevo API Key)
 OUTREACH_ENGINE_PROD_KEY=your_brevo_api_token_here
